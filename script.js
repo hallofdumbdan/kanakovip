@@ -14,7 +14,7 @@ async function joinServer() {
     if (isShareLink) {
         try {
             // Use a CORS proxy to fetch the share link
-            const proxyUrl = 'https://crossorigin.me/';
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
             const response = await fetch(proxyUrl + serverLink, { redirect: 'follow' });
 
             if (!response.ok) {
