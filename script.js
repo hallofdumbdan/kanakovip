@@ -6,38 +6,38 @@ async function joinServer() {
         return;
     }
 
-    // Check if the link is a share link
     const isShareLink = serverLink.startsWith('https://www.roblox.com/share?code=');
 
     let robloxLink;
 
     if (isShareLink) {
         try {
-            // Use a CORS proxy to fetch the share link
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const response = await fetch(proxyUrl + serverLink, { redirect: 'follow' });
+            const proxyUrl = 'https://kanako-vip.glitch.me/proxy?url=';
+            const response = await fetch(proxyUrl + encodeURIComponent(serverLink), { redirect: 'follow' });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(`Network response was not ok: ${response.statusText}`);
             }
 
             const finalUrl = response.url; // This should be the redirected URL
+            console.log(`Final URL: ${finalUrl}`);
+
             const urlParams = new URLSearchParams(finalUrl.split('?')[1]);
             const gameId = urlParams.get('placeId');
             const linkCode = urlParams.get('privateServerLinkCode');
 
             if (gameId && linkCode) {
                 robloxLink = `roblox://placeid=${gameId}&LinkCode=${linkCode}`;
+                console.log(`Generated roblox link: ${robloxLink}`);
             } else {
-                throw new Error('Invalid final URL format');
+                throw new Error('Invalid final URL format: missing placeId or privateServerLinkCode');
             }
         } catch (error) {
-            alert('Failed to fetch the share link. Please try again.');
+            alert(`Failed to fetch the share link. Please try again. Error: ${error.message}`);
             console.error('Error fetching the share link:', error);
             return;
         }
     } else {
-        // If it's a direct link
         try {
             const urlParams = new URLSearchParams(serverLink.split('?')[1]);
             const gameId = serverLink.match(/games\/(\d+)\//)[1];
@@ -45,6 +45,7 @@ async function joinServer() {
 
             if (gameId && linkCode) {
                 robloxLink = `roblox://placeid=${gameId}&LinkCode=${linkCode}`;
+                console.log(`Generated roblox link: ${robloxLink}`);
             } else {
                 throw new Error('Invalid VIP server link format');
             }
@@ -55,6 +56,5 @@ async function joinServer() {
         }
     }
 
-    // Redirect to the roblox:// link
     window.location.href = robloxLink;
 }
