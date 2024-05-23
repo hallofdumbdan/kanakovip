@@ -13,8 +13,10 @@ async function joinServer() {
 
     if (isShareLink) {
         try {
-            // Fetch the share link to resolve the final URL
-            const response = await fetch(serverLink, { redirect: 'follow' });
+            // Use a CORS proxy to fetch the share link
+            const proxyUrl = 'https://crossorigin.me/';
+            const response = await fetch(proxyUrl + serverLink, { redirect: 'follow' });
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
