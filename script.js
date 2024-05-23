@@ -1,3 +1,5 @@
+// Wrap your JavaScript code in script tags
+<script>
 async function joinServer() {
     const serverLink = document.getElementById('serverLink').value;
 
@@ -56,5 +58,7 @@ async function joinServer() {
         }
     }
 
+    // Open the generated Roblox join link in the same tab
     window.location.href = robloxLink;
 }
+</script>
