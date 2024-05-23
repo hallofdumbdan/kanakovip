@@ -19,10 +19,10 @@ async function joinServer() {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
             }
 
-            const finalUrl = response.url; // This should be the redirected URL
+            const finalUrl = await response.text(); // Get the final redirected URL as text
             console.log(`Final URL: ${finalUrl}`);
 
-            const urlParams = new URLSearchParams(finalUrl.split('?')[1]);
+            const urlParams = new URLSearchParams(new URL(finalUrl).search);
             const gameId = urlParams.get('placeId');
             const linkCode = urlParams.get('privateServerLinkCode');
 
